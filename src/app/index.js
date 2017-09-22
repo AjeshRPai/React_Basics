@@ -1,23 +1,32 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Router, Route, Link, browserHistory, IndexRoute  } from 'react-router'
+import MyStore from "./components/MyStore"
 
-import {Home} from "./components/Home";
-import {User} from "./components/User";
-
+// using CommonJS modules
 class Layout extends React.Component {
      constructor(props){
      	super(props);
+      this.state={
+         store:MyStore.getObj(),
+      };
+     }
+
+     componentWillMount(){
+       MyStore.on("change",()=>{
+         this.setState({
+            store:MyStore.getObj(),
+         });
+       });
      }
 
     render() {
+      const{ store}=this.state;
+
       return (
-         <div>
-          <h3> Home is here</h3>
-        </div>
-   
-        );
+        <div>State is {store}</div>
+      );
     }
 }
+
 
 render(<Layout/>, window.document.getElementById('app'));
